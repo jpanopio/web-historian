@@ -42,7 +42,11 @@ exports.isUrlInList = function(urlString, callback) {
   });
 };
 
-exports.addUrlToList = function() {
+exports.addUrlToList = function(urlString, callback) {
+  var fileStream = fs.createWriteStream(exports.paths.list, {flags: 'a'});
+  fileStream.write(urlString);
+  fileStream.end();
+  callback();
 };
 
 exports.isUrlArchived = function() {
