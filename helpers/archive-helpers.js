@@ -33,7 +33,6 @@ exports.readListOfUrls = function(callback) {
       throw err;
     }
     var fileLines = data.trim().split('\n');
-    console.log('there are '+ fileLines.length+ ' urlLines');
     callback(fileLines);
   });
 };
