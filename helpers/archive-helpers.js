@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var http = require('http');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -10,9 +11,9 @@ var _ = require('underscore');
  */
 
 exports.paths = {
-  siteAssets: path.join(__dirname, '../web/public'),
-  archivedSites: path.join(__dirname, '../archives/sites'),
-  list: path.join(__dirname, '../archives/sites.txt')
+  siteAssets: path.join(__dirname, '/../web/public'),
+  archivedSites: path.join(__dirname, '/../archives/sites'),
+  list: path.join(__dirname, '/../archives/sites.txt')
 };
 
 // Used for stubbing paths for tests, do not modify
@@ -49,9 +50,22 @@ exports.addUrlToList = function(urlString, callback) {
   callback();
 };
 
-exports.isUrlArchived = function() {
-  fs.readFile()
+exports.isUrlArchived = function(urlString, callback) {
+  fs.stat(exports.paths.archivedSites + '/' + urlString, function(error, stats){
+    if(error){
+      callback(false);
+    } else{
+      callback(stats.isFile());
+    }
+  });
 };
 
-exports.downloadUrls = function() {
+exports.downloadUrls = function(urlList) {
+  // Create files in the archivedSites with the names in urlList
+  _.each(urlList, function(urlString){
+    var fileStream = fs.createWriteStream(exports.paths.archivedSites + '/' + urlString);
+    http.request({hostname: urlString}, function(response) {
+      response.pipe(fileStream);
+    }).end();
+  });
 };
