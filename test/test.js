@@ -65,11 +65,14 @@ describe("server", function() {
           .send({ url: url })
           .expect(302, function (err) {
             if (!err) {
-              var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
-              expect(fileContents).to.equal(url + "\n");
+              setTimeout(function(){
+                var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
+                expect(fileContents).to.equal(url + "\n");
+                done(err);
+              }, 25);
+            }else{
+              done(err);
             }
-
-            done(err);
           });
       });
     });

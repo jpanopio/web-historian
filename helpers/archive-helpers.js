@@ -44,10 +44,12 @@ exports.isUrlInList = function(urlString, callback) {
 };
 
 exports.addUrlToList = function(urlString, callback) {
-  var fileStream = fs.createWriteStream(exports.paths.list, {flags: 'a'});
-  fileStream.write(urlString);
+  var fileStream = fs.createWriteStream(exports.paths.list, {flags: 'a', encoding: 'utf8'});
+  fileStream.write(urlString + '\n');
   fileStream.end();
-  callback();
+  if(callback){
+    callback();
+  }
 };
 
 exports.isUrlArchived = function(urlString, callback) {
