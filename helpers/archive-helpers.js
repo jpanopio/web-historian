@@ -32,7 +32,8 @@ exports.readListOfUrls = function(callback) {
     if(err){
       throw err;
     }
-    var fileLines = data.split('\n');
+    var fileLines = data.trim().split('\n');
+    console.log('there are '+ fileLines.length+ ' urlLines');
     callback(fileLines);
   });
 };
